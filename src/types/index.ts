@@ -1,25 +1,26 @@
 export interface IngestResult {
-  message: string;
-  chunksCount?: number;
-  tokensTotal?: number;
-  durationMs?: number;
-}
-
-export interface Source {
-  text: string;
-  score: number;
+  chunksCount: number;
+  totalTokens: number;
+  durationMs: number;
 }
 
 export interface AskResult {
   answer: string;
-  sources?: Source[];
-  durationMs?: number;
+  chunksRetrieved: number;
+  scores: number[];
+  durationMs: number;
+}
+
+export interface MessageMeta {
+  chunksRetrieved: number;
+  scores: number[];
+  durationMs: number;
 }
 
 export interface Message {
   role: 'user' | 'assistant';
   content: string;
-  sources?: Source[];
+  meta?: MessageMeta;
   timestamp: number;
 }
 

@@ -76,17 +76,11 @@ export function ConfigTab() {
                 {logs.map((log, i) => (
                   <div key={i} className="log-row">
                     <span className="log-icon">✓</span>
-                    <span className="log-msg">{log.message}</span>
+                    <span className="log-msg">Document ingéré</span>
                     <div className="log-pills">
-                      {log.chunksCount !== undefined && (
-                        <span className="pill">{log.chunksCount} chunks</span>
-                      )}
-                      {log.tokensTotal !== undefined && (
-                        <span className="pill">{log.tokensTotal} tokens</span>
-                      )}
-                      {log.durationMs !== undefined && (
-                        <span className="pill">{log.durationMs} ms</span>
-                      )}
+                      <span className="pill">{log.chunksCount} chunks</span>
+                      <span className="pill">{log.totalTokens} tokens</span>
+                      <span className="pill">{log.durationMs} ms</span>
                     </div>
                   </div>
                 ))}

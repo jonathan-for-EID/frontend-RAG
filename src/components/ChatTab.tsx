@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { ask } from '../services/api';
 import { useProvider } from '../context/ProviderContext';
-import type { Message, Step } from '../types';
+import type { Message, Step, MessageMeta } from '../types';
 
 const STORAGE_KEY = 'rag-chat-history';
 
@@ -23,7 +23,7 @@ export function ChatTab() {
   const [input, setInput] = useState('');
   const [step, setStep] = useState<Step>('idle');
   const [error, setError] = useState<string | null>(null);
-  const [showSources, setShowSources] = useState<Record<number, boolean>>({});
+  const [showMeta, setShowMeta] = useState<Record<number, boolean>>({});
   const bottomRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { provider } = useProvider();
@@ -58,10 +58,16 @@ export function ChatTab() {
 
       const result = await ask(question, provider);
 
+      const meta: MessageMeta = {
+        chunksRetrieved: result.chunksRetrieved,
+        scores: result.scores,
+        durationMs: result.durationMs,
+      };
+
       setMessages(prev => [...prev, {
         role: 'assistant',
         content: result.answer,
-        sources: result.sources,
+        meta,
         timestamp: Date.now(),
       }]);
     } catch (e) {
@@ -75,8 +81,8 @@ export function ChatTab() {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
   }
 
-  function toggleSources(i: number) {
-    setShowSources(prev => ({ ...prev, [i]: !prev[i] }));
+  function toggleMeta(i: number) {
+    setShowMeta(prev => ({ ...prev, [i]: !prev[i] }));
   }
 
   const busy = step !== 'idle';
@@ -115,19 +121,20 @@ export function ChatTab() {
               </div>
               <div className="message-content">
                 <div className="bubble">{msg.content}</div>
-                {msg.sources && msg.sources.length > 0 && (
+                {msg.meta && (
                   <>
-                    <button className="sources-toggle" onClick={() => toggleSources(i)}>
-                      {showSources[i] ? '▲' : '▼'} {msg.sources.length} source{msg.sources.length > 1 ? 's' : ''}
+                    <button className="sources-toggle" onClick={() => toggleMeta(i)}>
+                      {showMeta[i] ? '▲' : '▼'} {msg.meta.chunksRetrieved} chunk{msg.meta.chunksRetrieved !== 1 ? 's' : ''} · {msg.meta.durationMs} ms
                     </button>
-                    {showSources[i] && (
+                    {showMeta[i] && (
                       <div className="sources-list">
-                        {msg.sources.map((s, j) => (
-                          <div key={j} className="source-chip">
-                            <span className="source-pct">{(s.score * 100).toFixed(0)}%</span>
-                            <span className="source-excerpt">{s.text.slice(0, 140)}…</span>
-                          </div>
-                        ))}
+                        <div className="log-pills">
+                          <span className="pill">{msg.meta.chunksRetrieved} chunks récupérés</span>
+                          {msg.meta.scores.length > 0 && (
+                            <span className="pill">score max {(Math.max(...msg.meta.scores) * 100).toFixed(0)}%</span>
+                          )}
+                          <span className="pill">{msg.meta.durationMs} ms</span>
+                        </div>
                       </div>
                     )}
                   </>
