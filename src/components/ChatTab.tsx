@@ -1,0 +1,182 @@
+import { useState, useEffect, useRef } from 'react';
+import { ask } from '../services/api';
+import { useProvider } from '../context/ProviderContext';
+import type { Message, Step } from '../types';
+
+const STORAGE_KEY = 'rag-chat-history';
+
+const STEPS: Record<Step, string> = {
+  idle: '',
+  embedding: 'Vectorisation de la question…',
+  searching: 'Recherche des chunks pertinents…',
+  generating: 'Génération de la réponse…',
+  done: '',
+};
+
+function loadHistory(): Message[] {
+  try { return JSON.parse(sessionStorage.getItem(STORAGE_KEY) ?? '[]'); }
+  catch { return []; }
+}
+
+export function ChatTab() {
+  const [messages, setMessages] = useState<Message[]>(loadHistory);
+  const [input, setInput] = useState('');
+  const [step, setStep] = useState<Step>('idle');
+  const [error, setError] = useState<string | null>(null);
+  const [showSources, setShowSources] = useState<Record<number, boolean>>({});
+  const bottomRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const { provider } = useProvider();
+
+  useEffect(() => {
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  function autoResize() {
+    const el = textareaRef.current;
+    if (!el) return;
+    el.style.height = 'auto';
+    el.style.height = `${Math.min(el.scrollHeight, 120)}px`;
+  }
+
+  async function handleSend() {
+    if (!input.trim() || step !== 'idle') return;
+    const question = input.trim();
+    setInput('');
+    setError(null);
+    if (textareaRef.current) textareaRef.current.style.height = 'auto';
+
+    setMessages(prev => [...prev, { role: 'user', content: question, timestamp: Date.now() }]);
+
+    try {
+      setStep('embedding');
+      await delay(500);
+      setStep('searching');
+      await delay(500);
+      setStep('generating');
+
+      const result = await ask(question, provider);
+
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: result.answer,
+        sources: result.sources,
+        timestamp: Date.now(),
+      }]);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Erreur inconnue');
+    } finally {
+      setStep('idle');
+    }
+  }
+
+  function handleKeyDown(e: React.KeyboardEvent) {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
+  }
+
+  function toggleSources(i: number) {
+    setShowSources(prev => ({ ...prev, [i]: !prev[i] }));
+  }
+
+  const busy = step !== 'idle';
+
+  return (
+    <div className="page-body">
+      <div className="page-header">
+        <div>
+          <div className="page-title">Jonathan Chat for EID</div>
+          <div className="page-subtitle">RAG sur vos documents internes</div>
+        </div>
+        {messages.length > 0 && (
+          <button
+            className="btn btn-danger-ghost"
+            onClick={() => { setMessages([]); sessionStorage.removeItem(STORAGE_KEY); }}
+          >
+            🗑 Effacer
+          </button>
+        )}
+      </div>
+
+      <div className="chat-layout">
+        <div className="messages-area">
+          {messages.length === 0 && (
+            <div className="empty-chat">
+              <div className="empty-chat-icon">💬</div>
+              <h3>Commencez une conversation</h3>
+              <p>Posez une question sur vos documents ingérés. Le système recherchera les passages pertinents et formulera une réponse.</p>
+            </div>
+          )}
+
+          {messages.map((msg, i) => (
+            <div key={i} className={`message-row ${msg.role}`}>
+              <div className={`avatar ${msg.role}`}>
+                {msg.role === 'user' ? 'J' : '⚡'}
+              </div>
+              <div className="message-content">
+                <div className="bubble">{msg.content}</div>
+                {msg.sources && msg.sources.length > 0 && (
+                  <>
+                    <button className="sources-toggle" onClick={() => toggleSources(i)}>
+                      {showSources[i] ? '▲' : '▼'} {msg.sources.length} source{msg.sources.length > 1 ? 's' : ''}
+                    </button>
+                    {showSources[i] && (
+                      <div className="sources-list">
+                        {msg.sources.map((s, j) => (
+                          <div key={j} className="source-chip">
+                            <span className="source-pct">{(s.score * 100).toFixed(0)}%</span>
+                            <span className="source-excerpt">{s.text.slice(0, 140)}…</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            </div>
+          ))}
+
+          {busy && (
+            <div className="message-row assistant">
+              <div className="avatar assistant">⚡</div>
+              <div className="message-content">
+                <div className="bubble typing-bubble">
+                  <span className="typing-step">{STEPS[step]}</span>
+                  <div className="typing-dots">
+                    <span /><span /><span />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div ref={bottomRef} />
+        </div>
+
+        {error && <div className="error-banner" style={{ margin: '0 1.75rem 0.75rem' }}>⚠️ {error}</div>}
+
+        <div className="chat-input-area">
+          <div className="input-box">
+            <textarea
+              ref={textareaRef}
+              value={input}
+              rows={1}
+              onChange={e => { setInput(e.target.value); autoResize(); }}
+              onKeyDown={handleKeyDown}
+              placeholder="Posez votre question…"
+              disabled={busy}
+            />
+            <button className="send-btn" onClick={handleSend} disabled={!input.trim() || busy}>
+              ↑
+            </button>
+          </div>
+          <div className="input-hint">Entrée pour envoyer · Shift+Entrée pour saut de ligne</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function delay(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
