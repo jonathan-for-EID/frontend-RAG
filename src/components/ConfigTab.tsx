@@ -1,14 +1,29 @@
 import { useState } from 'react';
-import { ingest } from '../services/api';
+import { ingest, reset } from '../services/api';
 import { useProvider } from '../context/ProviderContext';
 import type { IngestResult } from '../types';
 
 export function ConfigTab() {
   const [text, setText] = useState('');
   const [loading, setLoading] = useState(false);
+  const [resetting, setResetting] = useState(false);
   const [logs, setLogs] = useState<IngestResult[]>([]);
   const [error, setError] = useState<string | null>(null);
   const { provider } = useProvider();
+
+  async function handleReset() {
+    if (!confirm('Vider la base de connaissances ?')) return;
+    setResetting(true);
+    setError(null);
+    try {
+      await reset(provider);
+      setLogs([]);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Erreur inconnue');
+    } finally {
+      setResetting(false);
+    }
+  }
 
   async function handleIngest() {
     if (!text.trim()) return;
@@ -32,6 +47,13 @@ export function ConfigTab() {
           <div className="page-title">Configuration</div>
           <div className="page-subtitle">Gérez les documents de la base de connaissances</div>
         </div>
+        <button
+          className="btn btn-danger-ghost"
+          onClick={handleReset}
+          disabled={resetting || loading}
+        >
+          {resetting ? '⏳ Suppression…' : '🗑 Vider la base'}
+        </button>
       </div>
 
       <div className="config-layout">

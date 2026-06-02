@@ -137,7 +137,7 @@
 
 /* Page header */
 .page-header {
-  padding: 1.25rem 1.75rem;
+  padding: 1.5rem 3rem;
   border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
@@ -219,7 +219,7 @@
 .home-layout {
   display: flex;
   height: 100%;
-  padding: 2rem;
+  padding: 3rem 6rem;
   overflow-y: auto;
 }
 
@@ -313,11 +313,10 @@
 .home-btn-primary:hover { background: var(--accent-hover); }
 
 .home-btn-secondary {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--text);
+  background: var(--accent);
+  color: #fff;
 }
-.home-btn-secondary:hover { background: var(--surface-2); }
+.home-btn-secondary:hover { background: var(--accent-hover); }
 
 /* Flow */
 .home-flow {
@@ -357,11 +356,25 @@
 .flow-arrow { color: var(--text-dim); font-size: 0.7rem; }
 
 /* Sections */
+.home-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
 .home-sections {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
-  flex: 1;
+}
+
+.home-sections--compact .home-section {
+  padding: 1rem 1.25rem;
+  gap: 0.625rem;
+}
+
+.home-sections--compact .home-section-desc {
+  font-size: 0.75rem;
 }
 
 .home-section {
@@ -420,7 +433,7 @@
 
 /* ─── CONFIG TAB ─── */
 .config-layout {
-  padding: 1.75rem;
+  padding: 2.5rem 3.5rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -519,7 +532,7 @@ textarea.doc-input::placeholder { color: var(--text-dim); }
 .messages-area {
   flex: 1;
   overflow-y: auto;
-  padding: 1.5rem 1.75rem;
+  padding: 2rem 3.5rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -705,7 +718,7 @@ textarea.doc-input::placeholder { color: var(--text-dim); }
 
 /* Chat input */
 .chat-input-area {
-  padding: 1rem 1.75rem 1.25rem;
+  padding: 1rem 3.5rem 1.5rem;
   border-top: 1px solid var(--border);
 }
 
@@ -763,4 +776,258 @@ textarea.doc-input::placeholder { color: var(--text-dim); }
   color: var(--text-dim);
   margin-top: 0.5rem;
   text-align: center;
+}
+
+/* ─── LOGIN ─── */
+.login-layout {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+}
+
+.login-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2.5rem 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 360px;
+}
+
+.login-icon {
+  width: 44px;
+  height: 44px;
+  background: var(--accent);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.login-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+.login-sub {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
+}
+
+.login-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.login-input {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-size: 0.875rem;
+  font-family: inherit;
+  padding: 0.625rem 0.875rem;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.login-input:focus { border-color: var(--accent); }
+.login-input::placeholder { color: var(--text-dim); }
+
+.login-btn { width: 100%; justify-content: center; padding: 0.625rem; }
+
+/* ─── CV TAB ─── */
+.cv-layout {
+  flex: 1;
+  overflow-y: auto;
+  padding: 2.5rem 3.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.cv-header {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.cv-name {
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  margin: 0;
+}
+
+.cv-title {
+  font-size: 0.875rem;
+  color: var(--accent-hover);
+  font-weight: 500;
+}
+
+.cv-contacts {
+  display: flex;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+.cv-body {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.cv-col-left, .cv-col-right {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.cv-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.cv-section-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent-hover);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.375rem;
+}
+
+.cv-text {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin: 0;
+}
+
+.cv-skill-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.cv-skill-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.cv-skill-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+.cv-skill-pill {
+  background: var(--accent-subtle);
+  border: 1px solid rgba(99,102,241,0.2);
+  border-radius: 100px;
+  color: var(--accent-hover);
+  font-size: 0.7rem;
+  padding: 0.2rem 0.6rem;
+}
+
+.cv-skill-pill--dim {
+  background: var(--surface);
+  border-color: var(--border);
+  color: var(--text-muted);
+}
+
+.cv-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.cv-entry-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.cv-entry-sub {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.cv-job {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.cv-job:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.cv-job-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.cv-job-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.cv-job-company {
+  font-size: 0.78rem;
+  color: var(--accent-hover);
+  margin-top: 0.1rem;
+}
+
+.cv-job-list {
+  margin: 0;
+  padding-left: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.cv-job-list li {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.cv-job-list li strong {
+  color: var(--text);
+  font-weight: 600;
 }

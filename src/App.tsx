@@ -2,15 +2,21 @@ import { useState } from 'react';
 import { ConfigTab } from './components/ConfigTab';
 import { ChatTab } from './components/ChatTab';
 import { HomePage } from './components/HomePage';
+import { CvTab } from './components/CvTab';
+import { LoginPage } from './components/LoginPage';
 import { useProvider } from './context/ProviderContext';
+import { useAuth } from './context/AuthContext';
 import { PROVIDERS } from './types';
 import './App.css';
 
-type Tab = 'home' | 'chat' | 'config';
+type Tab = 'home' | 'chat' | 'config' | 'cv';
 
 export default function App() {
   const [tab, setTab] = useState<Tab>('home');
   const { provider, setProvider } = useProvider();
+  const { apiKey, logout } = useAuth();
+
+  if (!apiKey) return <LoginPage />;
 
   return (
     <div className="app">
@@ -48,7 +54,19 @@ export default function App() {
           Configuration
         </button>
 
+        <button
+          className={`nav-item ${tab === 'cv' ? 'active' : ''}`}
+          onClick={() => setTab('cv')}
+        >
+          <span className="nav-item-icon">👤</span>
+          Mon CV
+        </button>
+
         <div className="sidebar-footer">
+          <button className="nav-item" onClick={logout} style={{ color: 'var(--text-dim)' }}>
+            <span className="nav-item-icon">🚪</span>
+            Déconnexion
+          </button>
           <div className="sidebar-section">Modèle LLM</div>
           <div className="provider-select-wrap">
             <div className="provider-dot" />
@@ -69,6 +87,7 @@ export default function App() {
         {tab === 'home'   && <HomePage onNavigate={setTab} />}
         {tab === 'chat'   && <ChatTab />}
         {tab === 'config' && <ConfigTab />}
+        {tab === 'cv'     && <CvTab />}
       </main>
     </div>
   );

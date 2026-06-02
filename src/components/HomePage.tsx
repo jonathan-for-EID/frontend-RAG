@@ -9,21 +9,24 @@ export function HomePage({ onNavigate }: Props) {
     <div className="home-layout">
       <div className="home-content">
 
-        <div>
+        <div className="home-intro">
           <div className="home-badge">Projet vitrine RAG</div>
           <h1 className="home-title">EID RAG Chat</h1>
           <p className="home-desc">
-            Application de Q&A sur documents construite pour démontrer la maîtrise du pattern{' '}
-            <span className="home-highlight">Retrieval-Augmented Generation</span> —
-            de la vectorisation des documents jusqu'à la génération de réponse par un LLM,
-            en passant par la recherche par similarité cosinus.
+            Bonjour, je suis <span className="home-highlight">Jonathan Ehrhard</span>, développeur Full-Stack C# / React avec 6 ans d'expérience.
+            J'ai conçu cette application de bout en bout pour l'entretien technique EID — elle démontre ma maîtrise du pattern{' '}
+            <span className="home-highlight">Retrieval-Augmented Generation</span> :
+            chunking token-aware, vectorisation via Mistral Embed, stockage et recherche kNN dans Elasticsearch,
+            puis génération de réponse contextuelle par un LLM (Mistral ou Claude Opus).
+            L'ensemble est déployé sur un VPS Ionos sous Docker avec reverse proxy Caddy et TLS automatique,
+            le frontend est publié sur GitHub Pages via CI/CD GitHub Actions.
           </p>
 
           <div className="home-stack">
             <div className="stack-item"><span className="stack-icon">⚛️</span><span>React 19 + Vite 8</span></div>
             <div className="stack-item"><span className="stack-icon">⚙️</span><span>.NET 8 RAG API</span></div>
-            <div className="stack-item"><span className="stack-icon">🖥️</span><span>Hébergement VPS</span></div>
-            <div className="stack-item"><span className="stack-icon">🗄️</span><span>NoSQL (Elasticsearch)</span></div>
+            <div className="stack-item"><span className="stack-icon">🖥️</span><span>VPS Ionos · Docker · Caddy TLS</span></div>
+            <div className="stack-item"><span className="stack-icon">🗄️</span><span>Elasticsearch 9 · kNN</span></div>
             <div className="stack-item"><span className="stack-icon">🟣</span><span>Claude Opus (chat)</span></div>
             <div className="stack-item"><span className="stack-icon">🟠</span><span>Mistral Embed + Chat</span></div>
             <div className="stack-item"><span className="stack-icon">🏗️</span><span>Pattern Strategy + Factory</span></div>
@@ -31,7 +34,7 @@ export function HomePage({ onNavigate }: Props) {
           </div>
         </div>
 
-        <div className="home-sections">
+        <div className="home-sections home-sections--compact">
           <div className="home-section">
             <div className="home-section-header">
               <span className="home-section-icon">⚙️</span>
@@ -41,12 +44,8 @@ export function HomePage({ onNavigate }: Props) {
               </div>
             </div>
             <p className="home-section-desc">
-              Collez un document texte (procédure interne, note, rapport…).
-              L'API le découpe en <strong>chunks token-aware</strong> via{' '}
-              <code>ParagraphChunker</code>, vectorise chaque chunk avec{' '}
-              <code>IEmbeddingService</code> (Mistral Embed) et stocke les vecteurs
-              dans <code>InMemoryVectorStore</code>. L'embedding est toujours Mistral.
-              Le choix du modèle LLM dans la sidebar n'affecte que la génération de réponse.
+              Collez un document texte. L'API le découpe en <strong>chunks token-aware</strong>,
+              vectorise via <code>IEmbeddingService</code> (Mistral Embed) et stocke dans Elasticsearch.
             </p>
             <button className="home-btn home-btn-primary" onClick={() => onNavigate('config')}>
               <span>📄</span> Configurer les documents
@@ -62,10 +61,8 @@ export function HomePage({ onNavigate }: Props) {
               </div>
             </div>
             <p className="home-section-desc">
-              Posez une question en langage naturel. Le système vectorise la question,
-              recherche les <strong>top-K chunks</strong> les plus proches par similarité cosinus,
-              construit un prompt contextuel et l'envoie au LLM via <code>IChatService</code>.
-              La réponse est ancrée dans vos documents, limitant les hallucinations hors contexte.
+              Posez une question en langage naturel. Le système récupère les <strong>top-K chunks</strong> par similarité cosinus
+              et génère une réponse ancrée dans vos documents via <code>IChatService</code>.
             </p>
             <button className="home-btn home-btn-secondary" onClick={() => onNavigate('chat')}>
               <span>💬</span> Ouvrir le chat
