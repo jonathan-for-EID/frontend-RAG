@@ -864,6 +864,25 @@ textarea.doc-input::placeholder { color: var(--text-dim); }
   border-bottom-left-radius: 3px;
 }
 
+.bubble ul {
+  padding-left: 1.25rem;
+  margin: 0.25rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.bubble li {
+  color: var(--text);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.bubble p { margin: 0.25rem 0; }
+.bubble br { display: block; margin: 0.1rem 0; content: ''; }
+.bubble strong { font-weight: 600; color: var(--text); }
+.bubble em { font-style: italic; }
+
 /* Typing indicator */
 .typing-bubble {
   display: flex;
