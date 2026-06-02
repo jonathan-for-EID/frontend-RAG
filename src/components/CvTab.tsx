@@ -3,7 +3,7 @@ export function CvTab() {
     <div className="cv-layout">
       <div className="cv-header">
         <div className="cv-photo-wrap">
-          <img src="/photo.jpg" alt="Jonathan Ehrhard" className="cv-photo" />
+          <img src={`${import.meta.env.BASE_URL}photo.jpg`} alt="Jonathan Ehrhard" className="cv-photo" />
         </div>
         <div style={{ flex: 1 }}>
           <h1 className="cv-name">Jonathan Ehrhard</h1>
@@ -14,7 +14,7 @@ export function CvTab() {
             <span>📍 Illkirch-Graffenstaden, France</span>
           </div>
           <a
-            href="/CV_EHRHARD_Jonathan_2026.pdf"
+            href={`${import.meta.env.BASE_URL}CV_EHRHARD_Jonathan_2026.pdf`}
             download="CV_EHRHARD_Jonathan_2026.pdf"
             className="btn btn-primary"
             style={{ marginTop: '0.75rem', textDecoration: 'none', display: 'inline-flex' }}

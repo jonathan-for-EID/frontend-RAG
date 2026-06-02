@@ -12,12 +12,13 @@ export function ConfigTab() {
   const { provider } = useProvider();
 
   async function handleReset() {
-    if (!confirm('Vider la base de connaissances ?')) return;
+    if (!confirm('Vider la mémoire courte ? La mémoire longue (données permanentes) sera conservée.')) return;
     setResetting(true);
     setError(null);
     try {
       await reset(provider);
       setLogs([]);
+      sessionStorage.removeItem('rag-chat-history');
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Erreur inconnue');
     } finally {
@@ -52,7 +53,7 @@ export function ConfigTab() {
           onClick={handleReset}
           disabled={resetting || loading}
         >
-          {resetting ? '⏳ Suppression…' : '🗑 Vider la base'}
+          {resetting ? '⏳ Suppression…' : '🗑 Vider la mémoire courte'}
         </button>
       </div>
 
