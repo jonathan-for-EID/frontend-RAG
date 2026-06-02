@@ -10,7 +10,10 @@ const Ctx = createContext<ProviderCtx>({ provider: 'Mistral', setProvider: () =>
 
 export function ProviderContextProvider({ children }: { children: React.ReactNode }) {
   const [provider, setProvider] = useState<Provider>(
-    () => (localStorage.getItem('rag-provider') as Provider) ?? 'Mistral'
+    () => {
+    const saved = localStorage.getItem('rag-provider') as Provider;
+    return saved === 'Fake' ? 'Mistral' : (saved ?? 'Mistral');
+  }
   );
 
   function handleSet(p: Provider) {

@@ -31,10 +31,9 @@ export type Step =
   | 'generating'
   | 'done';
 
-export type Provider = 'Fake' | 'Mistral' | 'Claude';
+export type Provider = 'Mistral' | 'Claude';
 
 export const PROVIDERS: { value: Provider; label: string }[] = [
-  { value: 'Fake',    label: 'Fake (dev)' },
   { value: 'Mistral', label: 'Mistral (hébergé)' },
   { value: 'Claude',  label: 'Claude Opus (Anthropic)' },
 ];
