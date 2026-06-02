@@ -89,6 +89,21 @@ export default function App() {
         {tab === 'config' && <ConfigTab />}
         {tab === 'cv'     && <CvTab />}
       </main>
+
+      <nav className="mobile-nav">
+        <button className={`mobile-nav-item ${tab === 'home' ? 'active' : ''}`} onClick={() => setTab('home')}>
+          <span>🏠</span><span>Accueil</span>
+        </button>
+        <button className={`mobile-nav-item ${tab === 'chat' ? 'active' : ''}`} onClick={() => setTab('chat')}>
+          <span>💬</span><span>AskJo</span>
+        </button>
+        <button className={`mobile-nav-item ${tab === 'config' ? 'active' : ''}`} onClick={() => setTab('config')}>
+          <span>⚙️</span><span>Config</span>
+        </button>
+        <button className={`mobile-nav-item ${tab === 'cv' ? 'active' : ''}`} onClick={() => setTab('cv')}>
+          <span>📋</span><span>CV</span>
+        </button>
+      </nav>
     </div>
   );
 }
