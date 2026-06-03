@@ -1198,6 +1198,52 @@ textarea.doc-input::placeholder { color: var(--text-dim); }
   .home-content { max-width: 1400px; }
 }
 
+/* ─── DEMO TAB ─── */
+.demo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.demo-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.demo-card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.demo-card-sub {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.demo-video-placeholder {
+  margin-top: 0.75rem;
+  background: var(--surface-2);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-dim);
+  font-size: 0.8rem;
+}
+
+@media (max-width: 768px) {
+  .demo-grid { grid-template-columns: 1fr; }
+}
+
 /* ─── CV TAB ─── */
 .cv-layout {
   flex: 1;

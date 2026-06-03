@@ -3,13 +3,14 @@ import { ConfigTab } from './components/ConfigTab';
 import { ChatTab } from './components/ChatTab';
 import { HomePage } from './components/HomePage';
 import { CvTab } from './components/CvTab';
+import { DemoTab } from './components/DemoTab';
 import { LoginPage } from './components/LoginPage';
 import { useProvider } from './context/ProviderContext';
 import { useAuth } from './context/AuthContext';
 import { PROVIDERS } from './types';
 import './App.css';
 
-type Tab = 'home' | 'chat' | 'config' | 'cv';
+type Tab = 'home' | 'chat' | 'config' | 'demo' | 'cv';
 
 export default function App() {
   const [tab, setTab] = useState<Tab>('home');
@@ -55,6 +56,14 @@ export default function App() {
         </button>
 
         <button
+          className={`nav-item ${tab === 'demo' ? 'active' : ''}`}
+          onClick={() => setTab('demo')}
+        >
+          <span className="nav-item-icon">🎬</span>
+          Explications
+        </button>
+
+        <button
           className={`nav-item ${tab === 'cv' ? 'active' : ''}`}
           onClick={() => setTab('cv')}
         >
@@ -87,6 +96,7 @@ export default function App() {
         {tab === 'home'   && <HomePage onNavigate={setTab} />}
         {tab === 'chat'   && <ChatTab />}
         {tab === 'config' && <ConfigTab />}
+        {tab === 'demo'   && <DemoTab />}
         {tab === 'cv'     && <CvTab />}
       </main>
 
